@@ -7,7 +7,7 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/storybooks/storybook)](https://bettercodehub.com/results/storybooks/storybook) [![codecov](https://codecov.io/gh/storybooks/storybook/branch/master/graph/badge.svg)](https://codecov.io/gh/storybooks/storybook)
 [![Storybook Slack](https://storybooks-slackin.herokuapp.com/badge.svg)](https://storybooks-slackin.herokuapp.com/)
 
-Storybook Addon Knobs expose React props as widgets to the user. By interacting with the knobs, the user can dynamically change the props received by the component. Inside of [Storybook](https://storybook.js.org), knobs can be used as dynamic variables. Knobs are displayed in an interactive panel alongside the story.
+Storybook Addon Knobs expose React props as widgets to the user. By interacting with the knobs, the user can dynamically change the props received by the component. Inside of [Storybook](https://storybook.js.org), knobs can be used as dynamic variables or supplied inline as component props. Knobs are displayed in an interactive panel alongside the story.
 
 This addon works with Storybook for:
 [React](https://github.com/storybooks/storybook/tree/master/app/react).
@@ -230,7 +230,7 @@ stories.add('number knob', () => {
 
 The color knob allows the user to enter a color value. When added to a story, the knob is displayed as a color picker widget that converts the user's selection to a hex value.
 
-The value passed into the knob should be a string representation of the color in the chosen format, such as a hex code, an rbg value, or an available color name.
+The value passed into the knob should be a string representation of the color in the chosen format, such as a hex code, an rbg value, or a color keyword.
 
 ##### Usage
 ```js
@@ -272,7 +272,7 @@ The object knob allows the user to modify a JSON object in a textarea.
 object(label, defaultValue); // defaultValue should be a valid JSON object
 ```
 
-The knob's input must be valid JSON, including any additional entries added by the user. When the input cannot be parsed into a JSON object, a red background is displayed on the knob.
+The knob's object input must be valid JSON, including any additional entries added by the user. When the input cannot be parsed into a JSON object, a red background is displayed on the knob.
 
 ##### Example
 ```js
