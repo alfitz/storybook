@@ -7,7 +7,9 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/storybooks/storybook)](https://bettercodehub.com/results/storybooks/storybook) [![codecov](https://codecov.io/gh/storybooks/storybook/branch/master/graph/badge.svg)](https://codecov.io/gh/storybooks/storybook)
 [![Storybook Slack](https://storybooks-slackin.herokuapp.com/badge.svg)](https://storybooks-slackin.herokuapp.com/)
 
-Storybook Addon Knobs expose React props as widgets to the user. By interacting with the knobs, the user can dynamically change the props received by the component. Inside of [Storybook](https://storybook.js.org), knobs can be used as dynamic variables or supplied inline as component props. Knobs are displayed in an interactive panel alongside the story.
+Storybook Addon Knobs expose React props as widgets available to the user in an interactive panel displayed alongside a story. By interacting with the knobs, the user can dynamically change the props received by the component. 
+
+Inside of [Storybook](https://storybook.js.org), knobs can be used as dynamic variables or supplied inline as component props. When a knob is modified, a rerender is triggered on the story, allowing the new values of the props to be passed into the component.
 
 This addon works with Storybook for:
 [React](https://github.com/storybooks/storybook/tree/master/app/react).
@@ -65,7 +67,7 @@ stories.add('dynamic variables', () => {
 });
 ```
 
-All knobs take in a user-facing label as the first parameter, followed by a variable number of additional parameters to populate the widget. Within every story, each knob must have a unique label to work properly.
+All knobs take in a user-facing label as the first parameter, followed by a variable number of additional parameters used to populate the widget. Each knob within a single story must have a unique label in order to work properly.
 
 ```js
 import { storiesOf } from '@storybook/react';
@@ -105,12 +107,14 @@ The following lists the knobs available for use.
 
 ### text
 
-The text knobs allows the user to interact with text used in a story using an input field.
+The `text` knobs allows the user to interact with text used in a story using an input field.
 
 ##### Usage
 ```js
 text(label, defaultValue);
 ```
+
+In the following example, the value of the text knob is used as a dynamic variable in the story.
 
 ##### Example
 ```js
@@ -130,14 +134,14 @@ stories.add('text knob', () => {
 
 ### boolean
 
-The boolean knob allows the user to modify a boolean used in a story using a checkbox.
+The `boolean` knob allows the user to modify a boolean used in a story using a checkbox.
 
 ##### Usage
 ```js
 boolean(label, defaultValue); // valid values are [true, false]
 ```
 
-In the following example, the value of the knob is also used to dynamically set the button's text content.
+In the following example, the value of the knob is also used to dynamically set the text content of the button.
 
 ##### Example
 ```js
@@ -153,7 +157,7 @@ stories.add('boolean knob', () => {
     <button
       disabled={isDisabled}
     >
-      { isDisabled ? 'Can\'t Click Me!' : 'Click Me!'}
+      { isDisabled ? 'Cannot Click Me!' : 'Click Me!'}
     //</button>
   );
 });
@@ -161,14 +165,14 @@ stories.add('boolean knob', () => {
 
 ### number
 
-The number knob allows the user to modify a number used in a story using an input field.
+The `number` knob allows the user to modify a number used in a story using an input field.
 
 ##### Usage
 ```js
 number(label, defaultValue); // valid values are numbers [0-9]
 ```
 
-In the following example, the value of the knob is fed in as a prop to the component rendered in the story.
+In the following example, the value of the knob is fed in inline as a prop to the component rendered in the story.
 
 ##### Example
 ```js
@@ -189,8 +193,8 @@ stories.add('number knob', () => {
 
 ### number bound by range
 
-The number knob has an optional third parameter to allow the user to modify a number within a range using a slider. Slider options should be defined in an object with the following keys:
-- range: `true` - used as a flag in the component to render a slider
+The `number` knob has an optional third parameter that allows the user to modify a number within a specified range using a slider. Slider options should be defined in an object with the following keys:
+- range: `true` - used as a flag within the `number` component to render a slider
 - min: `number` - minimum value of the range
 - max: `number` - maximum value of the range
 - step: `number` - scale of each step in the range
@@ -228,7 +232,7 @@ stories.add('number knob', () => {
 
 ### color
 
-The color knob allows the user to enter a color value. When added to a story, the knob is displayed as a color picker widget that converts the user's selection to a hex value.
+The `color` knob allows the user to enter a color value. When added to a story, the knob is displayed as a color picker widget that converts the user's selection to a hex value.
 
 The value passed into the knob should be a string representation of the color in the chosen format, such as a hex code, an rbg value, or a color keyword.
 
@@ -236,6 +240,8 @@ The value passed into the knob should be a string representation of the color in
 ```js
 color(label, defaultValue);
 ```
+
+In the example below, the color knobs instantiated inline as props passed to their respective components. Note that each example uses a different valid color representation.
 
 ##### Example
 ```js
@@ -265,7 +271,7 @@ stories.add('color knob', () => {
 
 ### object
 
-The object knob allows the user to modify a JSON object in a textarea.
+The `object` knob allows the user to modify a JSON object in a textarea.
 
 ##### Usage
 ```js
@@ -273,6 +279,8 @@ object(label, defaultValue); // defaultValue should be a valid JSON object
 ```
 
 The knob's object input must be valid JSON, including any additional entries added by the user. When the input cannot be parsed into a JSON object, a red background is displayed on the knob.
+
+In the example below, the current value of the object is stored in a variable that gets passed in as a prop to the `Styled Component`.
 
 ##### Example
 ```js
@@ -304,66 +312,108 @@ const value = object(label, defaultValue);
 
 ### array
 
-Allows you to get an array from the user.
+The `array` knob allows the user to modify values in an array using a textarea. By default, the knob's separator is a comma. The knob takes an optional third parameter for a string to override the default separator.
 
+##### Usage
 ```js
-import { array } from '@storybook/addon-knobs';
-
-const label = 'Styles';
-const defaultValue = ['Red']
-
-const value = array(label, defaultValue);
+array(label, defaultValue, [separator]);
 ```
 
-> While editing values inside the knob, you will need to use a separator.
-> By default it's a comma, but this can be override by passing a separator variable.
->
-> ```js
-> import { array } from '@storybook/addon-knobs';
->
-> const label = 'Styles';
-> const defaultValue = ['Red'];
-> const separator = ':';
-> const value = array(label, defaultValue, separator);
-> ```
+In the example below, the current value of the knob is passed in as a prop to the `GroceryComponent`.
+
+##### Example
+```js
+import { storiesOf } from '@storybook/react';
+import { withKnobs, array } from '@storybook/addon-knobs';
+import GroceryComponent from 'foo';
+
+stories.addDecorator(withKnobs);
+
+stories.add('array knob', () => {
+  const knobLabel = 'Grocery List';
+  const listItems = ['apples', 'bananas', 'cookies'];
+  const groceryList = array(knobLabel, listItems);
+
+  return (
+    <GroceryComponent
+      groceryList={groceryList}
+    ///>
+  );
+});
+```
 
 ### select
 
-Allows you to get a value from a select box from the user.
+The `select` knob allows the user to select a value from a dropdown.
 
+Select options may be passed in using an object or an array. Using an object allows for flexibility for defining separate presentational option keys and option values, while an array will have the same select value as the option displayed.
+
+An optional third parameter sets the default value of the select dropdown. If no default value is passed in, the first value in the collection will be displayed when the dropdown renders.
+
+##### Usage
 ```js
-import { select } from '@storybook/addon-knobs';
-
-const label = 'Colors';
-const options = {
-  red: 'Red',
-  blue: 'Blue',
-  yellow: 'Yellow',
-};
-const defaultValue = 'red';
-
-const value = select(label, options, defaultValue);
+select(label, defaultSelectValues [defaultSelectedValue]);
 ```
 
-> You can also provide options as an array like this: `['red', 'blue', 'yellow']`
+In the following example, an array of options is passed in to the knob. The currently selected value is rendered as a string within the story.
+
+##### Example
+```js
+import { withKnobs, select } from '@storybook/addon-knobs';
+
+const houses = [
+  'Gryffindor',
+  'Ravenclaw',
+  'Hufflepuff',
+  'Slytherin',
+];
+
+stories.addDecorator(withKnobs);
+
+stories.add('select knob', () => {
+  const selectedValue = select('house', houses);
+  return (
+    <div>
+      { selectedValue }
+    //</div>
+  );
+})
+```
+
 
 ### date
 
-Allow you to get date (and time) from the user.
+The `date` knob allows the user to configure a date/time value through a calendar widget that includes a time selection.
 
+Note that the default value passed into the `date` knob must be a [JavaScript Date object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), not a string. The return value of the knob, however, is a string representation of milliseconds from the epoch. Additional work may be required to pass along date information in the proper format to the components in the story.
+
+##### Usage
 ```js
-import { date } from '@storybook/addon-knobs';
-
-const label = 'Event Date';
-const defaultValue = new Date('Jan 20 2017');
-const value = date(label, defaultValue);
+date(label, defaultValue);
 ```
 
-### withKnobs vs withKnobsOptions
+In the following example, a `Date()` is passed inline to the component, which changes dynamically as the value is toggled.
 
-If you feel like this addon is not performing well enough there is an option to use `withKnobsOptions` instead of `withKnobs`.
-Usage:
+##### Example
+```js
+import { withKnobs, date } from '@storybook/addon-knobs';
 
+stories.addDecorator(withKnobs);
+
+stories.add('date knob', () => {
+  return (
+    <div>
+      { date('select a date', new Date('Aug 1 2017')) }
+    //</div>
+  );
+})
+```
+
+### withKnobsOptions
+
+The knobs decorator may be adjusted if knobs are negatively impacting the performance of the stories.
+
+##### Usage
 ```js
 story.addDecorator(withKnobsOptions({
   debounce: { wait: number, leading: boolean}, // Same as lodash debounce.
@@ -374,8 +424,8 @@ story.addDecorator(withKnobsOptions({
 ## Additional Links
 
 -   [Live Storybook with Knobs](https://goo.gl/uX9WLf)
--   [Sample Storybook repo](https://github.com/kadira-samples/storybook-knobs-example).
--   [Video of Storybook with Knobs in action](https://www.youtube.com/watch?v=kopW6vzs9dg&feature=youtu.be).
+-   [Sample Storybook repo](https://github.com/kadira-samples/storybook-knobs-example)
+-   [Video of Storybook with Knobs in action](https://www.youtube.com/watch?v=kopW6vzs9dg&feature=youtu.be)
 
 ## Typescript
 
